@@ -46,9 +46,11 @@ sp=spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
 #making the list for inputing into the method to add songs into the playlist
 inputing_songs_list=[]
 for song in top_100_songs_list:
-    song=sp.search(q=(song,year),limit=1,type="track")
-    inputing_songs_list.append(song["tracks"]["items"][0]["external_urls"]["spotify"])
-
+    try:
+        song=sp.search(q=(song,year),limit=1,type="track")
+        inputing_songs_list.append(song["tracks"]["items"][0]["external_urls"]["spotify"])
+    except :
+        print("an error occurred")
 playlist=sp.user_playlist_create(user=user_id,name=f"{year}'s TOP 100 HITS",description="ready for nostalgia?",public=False)
 playlist_id=playlist["id"]
 sp.playlist_add_items(playlist_id=playlist_id,items=inputing_songs_list)
